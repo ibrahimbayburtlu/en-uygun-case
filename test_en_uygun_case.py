@@ -201,14 +201,7 @@ class TestTaskScheduling(unittest.TestCase):
             current_time = end_time
 
     def test_diamond_pattern(self):
-        """
-        Diamond şeklinde bağımlılık yapısı:
-             A
-           /   \
-          B     C
-           \   /
-             D
-        """
+
         tasks = ['A', 'B', 'C', 'D']
         dependencies = {
             'A': [],
@@ -231,10 +224,7 @@ class TestTaskScheduling(unittest.TestCase):
         self.assertTrue(actual_order.index('C') < actual_order.index('D'))
 
     def test_long_chain(self):
-        """
-        Uzun zincir bağımlılığı:
-        A -> B -> C -> D -> E
-        """
+
         tasks = ['A', 'B', 'C', 'D', 'E']
         dependencies = {
             'A': [],
@@ -256,12 +246,7 @@ class TestTaskScheduling(unittest.TestCase):
         self.assertEqual(actual_order, ['A', 'B', 'C', 'D', 'E'])
 
     def test_multiple_independent_chains(self):
-        """
-        Birden fazla bağımsız zincir:
-        A -> B -> C
-        D -> E
-        F
-        """
+
         tasks = ['A', 'B', 'C', 'D', 'E', 'F']
         dependencies = {
             'A': [],
@@ -287,9 +272,6 @@ class TestTaskScheduling(unittest.TestCase):
         self.assertTrue(actual_order.index('D') < actual_order.index('E'))
 
     def test_single_task(self):
-        """
-        Tek görev durumu
-        """
         tasks = ['A']
         dependencies = {'A': []}
         completion_time = {'A': 5}
@@ -304,7 +286,7 @@ class TestMainFunction(unittest.TestCase):
     @patch('en_uygun_case.get_dependencies_from_user')
     @patch('en_uygun_case.get_completion_times')
     def test_successful_execution(self, mock_completion_times, mock_dependencies, mock_tasks, mock_stdout):
-        # Arrange
+
         mock_tasks.return_value = ['A', 'B', 'C']
         mock_dependencies.return_value = {
             'A': [],
@@ -317,10 +299,10 @@ class TestMainFunction(unittest.TestCase):
             'C': 4
         }
 
-        # Act
+
         main()
 
-        # Assert
+
         output = mock_stdout.getvalue()
         self.assertIn("Results:", output)
         self.assertIn("Minimum Completion Time:", output)
@@ -329,13 +311,13 @@ class TestMainFunction(unittest.TestCase):
     @patch('sys.stdout', new_callable=StringIO)
     @patch('en_uygun_case.get_tasks_from_user')
     def test_no_tasks_entered(self, mock_tasks, mock_stdout):
-        # Arrange
+
         mock_tasks.return_value = []
 
-        # Act
+
         main()
 
-        # Assert
+
         self.assertIn("No tasks were entered!", mock_stdout.getvalue())
 
     @patch('sys.stdout', new_callable=StringIO)
@@ -343,7 +325,7 @@ class TestMainFunction(unittest.TestCase):
     @patch('en_uygun_case.get_dependencies_from_user')
     @patch('en_uygun_case.get_completion_times')
     def test_complex_task_scenario(self, mock_completion_times, mock_dependencies, mock_tasks, mock_stdout):
-        # Arrange
+
         mock_tasks.return_value = ['A', 'B', 'C', 'D', 'E', 'F']
         mock_dependencies.return_value = {
             'A': [],
@@ -362,10 +344,10 @@ class TestMainFunction(unittest.TestCase):
             'F': 3
         }
 
-        # Act
+
         main()
 
-        # Assert
+
         output = mock_stdout.getvalue()
         self.assertIn("Results:", output)
         self.assertIn("Minimum Completion Time:", output)
@@ -376,15 +358,15 @@ class TestMainFunction(unittest.TestCase):
     @patch('en_uygun_case.get_dependencies_from_user')
     @patch('en_uygun_case.get_completion_times')
     def test_single_task_scenario(self, mock_completion_times, mock_dependencies, mock_tasks, mock_stdout):
-        # Arrange
+
         mock_tasks.return_value = ['A']
         mock_dependencies.return_value = {'A': []}
         mock_completion_times.return_value = {'A': 5}
 
-        # Act
+
         main()
 
-        # Assert
+
         output = mock_stdout.getvalue()
         self.assertIn("Results:", output)
         self.assertIn("Minimum Completion Time:", output)
